@@ -27,6 +27,19 @@ async function main() {
 
   // We also save the contract's artifacts and address in the frontend directory
   saveFrontendFiles(token);
+
+
+  // repeat the above for escrow contract
+  // we should be able to deploy this from the frontend on contract creation
+  // const Escrow = await ethers.getContractFactory("Escrow");
+  // const escrow = await Escrow.deploy();
+  // await escrow.deployed();
+
+  // console.log("Escrow contract address:", escrow.address);
+  // // We also save the contract's artifacts and address in the frontend directory
+  // saveFrontendFiles(escrow);
+
+
 }
 
 function saveFrontendFiles(token) {
