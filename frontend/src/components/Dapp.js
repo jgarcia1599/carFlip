@@ -18,6 +18,7 @@ import { Transfer } from "./Transfer";
 import { TransactionErrorMessage } from "./TransactionErrorMessage";
 import { WaitingForTransactionMessage } from "./WaitingForTransactionMessage";
 import { NoTokensMessage } from "./NoTokensMessage";
+import deployEscrowContract from "../utils/deployEscrowContract";
 
 // This is the Hardhat Network id, you might change it in the hardhat.config.js.
 // If you are using MetaMask, be sure to change the Network id to 1337.
@@ -158,6 +159,28 @@ export class Dapp extends React.Component {
             )}
           </div>
         </div>
+      
+      <div className="row">
+        <div className="col-12">
+        <button 
+        type="button" 
+        className="btn btn-primary"
+        onClick={()=>{
+          // test whether or not we can depploy the escrow contract
+          deployEscrowContract("0x2961ad60fda7ef31ceed903386bc435e92b18b24", "0x2961ad60fda7ef31ceed903386bc435e92b18b24", 1000).then(response=>{
+            console.log("this is the response of deploy action", response)
+          })
+          .catch(err=>console.log("error deploying contract", err))
+
+        }}
+
+
+        >Test a deploy of Escrow Contract
+        </button>
+
+        </div>
+      </div>
+
       </div>
     );
   }
@@ -227,6 +250,9 @@ export class Dapp extends React.Component {
   async _initializeEthers() {
     // We first initialize ethers by creating a provider using window.ethereum
     this._provider = new ethers.providers.Web3Provider(window.ethereum);
+    // make the provider accessible through the window object
+    window._provider = this._provider;
+    console.log("window provider", window._provider)
 
     // Then, we initialize the contract using that provider and the token's
     // artifact. You can do this same thing with your contracts.
