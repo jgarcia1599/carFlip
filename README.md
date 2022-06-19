@@ -1,3 +1,23 @@
+# Chainshot Final Project
+
+-  Run api
+```
+nodemon api/index.js
+```
+
+- Create postgres database: 
+```
+sudo -u postgres psql
+postgres=# create database hardhat;
+postgres=# create user hardhatuser with encrypted password 'hardhatpassword';
+postgres=# grant all privileges on database hardhat to hardhatuser;
+```
+The connection string for the above db would be ```postgres://hardhatuser:hardhatpassword@127.0.0.1:5432/hardhat```.
+
+
+
+Everything written below this line is the hardhat boilerplate project documentation. 
+
 # Hardhat Hackathon Boilerplate
 
 This repository contains a sample project that you can use as the starting point
