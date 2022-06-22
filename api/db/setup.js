@@ -6,7 +6,7 @@ const modelDefiners = [
   require("./models/contract_records.model")
 ];
 
-async function setupDB(force_sync = false) {
+async function setupDB(force_sync = true) {
   try {
     // We define the models
     for (const modelDefiner of modelDefiners) {

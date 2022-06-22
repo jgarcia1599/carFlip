@@ -7,7 +7,11 @@ module.exports = async (sequelize) => {
     "contract_records",
     {
       // Model attributes are defined here
-      transactionRecord: {
+      contractAddress: {
+        type: DataTypes.STRING,
+        allowNull: false
+      }, 
+      userAddress: {
         type: DataTypes.STRING,
         allowNull: false
       }

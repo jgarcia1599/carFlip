@@ -1,8 +1,37 @@
 # Chainshot Final Project
 
--  Run api
+
+
+- Delete unnecessary files created during development
+```
+bash ./run-files.sh
+```
+
+- Run hardhat local network
+```
+npx hardhat node
+```
+- Compile Escrow smart contract
+```
+npx hardhat compile --network localhost 
+```
+- Deploy Token Smart Contract
+
+```
+npx hardhat --network localhost run scripts/deploy.js
+```
+
+-  Run API
+
 ```
 nodemon api/index.js
+```
+
+- Run UI
+
+```
+cd frontend/
+npm start
 ```
 
 - Create postgres database: 
@@ -14,9 +43,7 @@ postgres=# grant all privileges on database hardhat to hardhatuser;
 ```
 The connection string for the above db would be ```postgres://hardhatuser:hardhatpassword@127.0.0.1:5432/hardhat```.
 
-
-
-Everything written below this line is the hardhat boilerplate project documentation. 
+<b>Everything written below this line is the hardhat boilerplate project documentation...</b>
 
 # Hardhat Hackathon Boilerplate
 

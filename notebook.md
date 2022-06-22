@@ -14,3 +14,11 @@ Things to do:
 - save contracts created using a simple node js api. 
 - show all contracts created to the user. filter contracts list based on a user's address.
 
+
+Wednesday June 22
+- get contracts and post contracts api endpoints
+
+things to do:
+- show all contracts in UI
+- allow user to dploy excrow contract without beneficiary or aarbitrer
+- allow users to be beneficiaries or arbitrers of any contract

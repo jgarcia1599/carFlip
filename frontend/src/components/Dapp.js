@@ -19,6 +19,8 @@ import { TransactionErrorMessage } from "./TransactionErrorMessage";
 import { WaitingForTransactionMessage } from "./WaitingForTransactionMessage";
 import { NoTokensMessage } from "./NoTokensMessage";
 import deployEscrowContract from "../utils/deployEscrowContract";
+import { postContract } from "../utils/api";
+
 
 // This is the Hardhat Network id, you might change it in the hardhat.config.js.
 // If you are using MetaMask, be sure to change the Network id to 1337.
@@ -167,8 +169,11 @@ export class Dapp extends React.Component {
         className="btn btn-primary"
         onClick={()=>{
           // test whether or not we can depploy the escrow contract
-          deployEscrowContract("0x2961ad60fda7ef31ceed903386bc435e92b18b24", "0x2961ad60fda7ef31ceed903386bc435e92b18b24", 1000).then(response=>{
-            console.log("this is the response of deploy action", response)
+          deployEscrowContract("0x2961ad60fda7ef31ceed903386bc435e92b18b24", "0x2961ad60fda7ef31ceed903386bc435e92b18b24", 1000).then(async contract=>{
+            console.log("this is the response of deploy action", contract);
+            console.log("this is the contract address ", contract.address, "deployed by", this.state.selectedAddress);
+            postContract(contract.address, this.state.selectedAddress)
+            //now i will save the contract address to the centralized api
           })
           .catch(err=>console.log("error deploying contract", err))
 
