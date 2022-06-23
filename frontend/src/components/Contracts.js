@@ -1,10 +1,13 @@
 import { observer } from "mobx-react";
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 import model from "../model";
 import { postContract, getContracts } from "../utils/api";
 import deployEscrowContract from "../utils/deployEscrowContract";
-
+import { getContractInfoOnChain } from "../utils/ethers";
 function Contracts() {
+    
+    let [contractObjects, setContractObjects] = useState([])
+
   useEffect(() => {
     getContracts();
   }, []);

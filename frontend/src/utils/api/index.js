@@ -18,12 +18,12 @@ export function getContracts() {
       .get(`${configuration.API_LINK}/get_contracts`, apiConfig())
       .then((response) => {
         console.log("get a contract", response.data);
-        model.contracts = response.data.contracts;
-
+        model.saveContracts(response.data.contracts);
         resolve();
       })
       .catch((error) => {
-        reject(error.response.data.message);
+        console.log(error)
+        reject();
       });
   });
 }
