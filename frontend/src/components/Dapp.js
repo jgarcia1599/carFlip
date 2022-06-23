@@ -23,6 +23,7 @@ import deployEscrowContract from "../utils/deployEscrowContract";
 import { postContract } from "../utils/api";
 import Navbar from "./Navbar";
 import model from "../model";
+import Contracts from "./Contracts";
 
 // This is the Hardhat Network id, you might change it in the hardhat.config.js.
 // If you are using MetaMask, be sure to change the Network id to 1337.
@@ -137,44 +138,6 @@ class Dapp extends React.Component {
     );
   }
 
-  renderAllContractsPage() {
-    return (
-      <div className="row">
-        <div className="col-12">
-          <button
-            type="button"
-            className="btn btn-primary"
-            onClick={() => {
-              // test whether or not we can depploy the escrow contract
-              deployEscrowContract(
-                "0x2961ad60fda7ef31ceed903386bc435e92b18b24",
-                "0x2961ad60fda7ef31ceed903386bc435e92b18b24",
-                1000
-              )
-                .then(async (contract) => {
-                  console.log(
-                    "this is the response of deploy action",
-                    contract
-                  );
-                  console.log(
-                    "this is the contract address ",
-                    contract.address,
-                    "deployed by",
-                    this.state.selectedAddress
-                  );
-                  postContract(contract.address, this.state.selectedAddress);
-                  //now i will save the contract address to the centralized api
-                })
-                .catch((err) => console.log("error deploying contract", err));
-            }}
-          >
-            Test a deploy of Escrow Contract
-          </button>
-        </div>
-      </div>
-    );
-  }
-
   render() {
     // Ethereum wallets inject the window.ethereum object. If it hasn't been
     // injected, we instruct the user to install MetaMask.
@@ -210,7 +173,7 @@ class Dapp extends React.Component {
       <div className="container p-4">
         <Navbar />
         {model.currentPage === "token" && this.renderEscrowTokenPage()}
-        {model.currentPage === "contracts" && this.renderAllContractsPage()}
+        {model.currentPage === "contracts" && <Contracts />}
       </div>
     );
   }
@@ -268,6 +231,9 @@ class Dapp extends React.Component {
     this.setState({
       selectedAddress: userAddress,
     });
+
+    // model version
+    model.userAddress = userAddress;
 
     // Then, we initialize ethers, fetch the token's data, and start polling
     // for the user's balance.

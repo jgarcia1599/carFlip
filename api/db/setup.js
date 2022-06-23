@@ -1,12 +1,10 @@
-const {applyAssociations} = require("./associations");
+const { applyAssociations } = require("./associations");
 const sequelize = require("./index");
 
 // We define all models according to their files.
-const modelDefiners = [
-  require("./models/contract_records.model")
-];
+const modelDefiners = [require("./models/contract_records.model")];
 
-async function setupDB(force_sync = true) {
+async function setupDB(force_sync = false) {
   try {
     // We define the models
     for (const modelDefiner of modelDefiners) {
@@ -19,7 +17,7 @@ async function setupDB(force_sync = true) {
 
     // sync sequelize
     //
-    await sequelize.sync({force: force_sync});
+    await sequelize.sync({ force: force_sync });
 
     // add default values
     await createDefaultValues(sequelize);
@@ -38,4 +36,4 @@ async function createDefaultValues(db) {
   // add any default values here
 }
 
-module.exports = {setupDB};
+module.exports = { setupDB };

@@ -1,48 +1,48 @@
 import axios from "axios";
-import {configuration} from "../configuration";
-
+import model from "../../model";
+import { configuration } from "../configuration";
 
 // functions to interface with our centralized Node.js api
 
 function apiConfig() {
-    return {
-      headers: {
-        "content-type": "application/json",
-      }
-    };
-  }
-  
+  return {
+    headers: {
+      "content-type": "application/json",
+    },
+  };
+}
 
-  export function getContracts() {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(`${configuration.API_LINK}/get_contracts`, apiConfig())
-        .then((response) => {
-            console.log("get a contract", response.data)
-          resolve();
-        })
-        .catch((error) => {
-          reject(error.response.data.message);
-        });
-    });
-  }
+export function getContracts() {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`${configuration.API_LINK}/get_contracts`, apiConfig())
+      .then((response) => {
+        console.log("get a contract", response.data);
+        model.contracts = response.data.contracts;
 
-  export function postContract(contractAddress, userAddress) {
-    let data = {
-        contractAddress:contractAddress, 
-        userAddress:userAddress
-    }
-    return new Promise((resolve, reject) => {
-      axios
-        .post(`${configuration.API_LINK}/post_contracts`, data, apiConfig())
-        .then((response) => {
-        console.log("post a contract",response.data)
-          resolve();
-        })
-        .catch((error) => {
-          reject(error.response.data.message);
-        });
-    });
-  }
+        resolve();
+      })
+      .catch((error) => {
+        reject(error.response.data.message);
+      });
+  });
+}
 
-
+export function postContract(contractAddress, userAddress) {
+  let data = {
+    contractAddress: contractAddress,
+    userAddress: userAddress,
+  };
+  return new Promise((resolve, reject) => {
+    axios
+      .post(`${configuration.API_LINK}/post_contracts`, data, apiConfig())
+      .then((response) => {
+        console.log("post a contract", response.data);
+        getContracts();
+        resolve();
+      })
+      .catch((error) => {
+        reject(error.response.data.message);
+      });
+  });
+}
