@@ -4,7 +4,7 @@
 
 - Delete unnecessary files created during development
 ```
-bash ./run-files.sh
+bash ./remove-files.sh
 ```
 
 - Run hardhat local network

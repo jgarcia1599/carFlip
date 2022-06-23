@@ -22,7 +22,7 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-app.get("/get_contracts", (req, res) => {
+app.get("/get_contracts", async (req, res) => {
   try {
     let contracts = await db.models.contract_records.findAll();
     res.json({ status: "success", contracts: contracts });

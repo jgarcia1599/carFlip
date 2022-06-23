@@ -1,4 +1,5 @@
 import React from "react";
+import { observer } from "mobx-react";
 
 // We'll use ethers to interact with the Ethereum network and our contract
 import { ethers } from "ethers";
@@ -20,13 +21,14 @@ import { WaitingForTransactionMessage } from "./WaitingForTransactionMessage";
 import { NoTokensMessage } from "./NoTokensMessage";
 import deployEscrowContract from "../utils/deployEscrowContract";
 import { postContract } from "../utils/api";
-
+import Navbar from "./Navbar";
+import model from "../model";
 
 // This is the Hardhat Network id, you might change it in the hardhat.config.js.
 // If you are using MetaMask, be sure to change the Network id to 1337.
 // Here's a list of network ids https://docs.metamask.io/guide/ethereum-provider.html#properties
 // to use when deploying to other networks.
-const HARDHAT_NETWORK_ID = '31337';
+const HARDHAT_NETWORK_ID = "31337";
 
 // This is an error code that indicates that the user canceled a transaction
 const ERROR_CODE_TX_REJECTED_BY_USER = 4001;
@@ -41,7 +43,7 @@ const ERROR_CODE_TX_REJECTED_BY_USER = 4001;
 // Note that (3) and (4) are specific of this sample application, but they show
 // you how to keep your Dapp and contract's state in sync,  and how to send a
 // transaction.
-export class Dapp extends React.Component {
+class Dapp extends React.Component {
   constructor(props) {
     super(props);
 
@@ -62,39 +64,9 @@ export class Dapp extends React.Component {
     this.state = this.initialState;
   }
 
-  render() {
-    // Ethereum wallets inject the window.ethereum object. If it hasn't been
-    // injected, we instruct the user to install MetaMask.
-    if (window.ethereum === undefined) {
-      return <NoWalletDetected />;
-    }
-
-    // The next thing we need to do, is to ask the user to connect their wallet.
-    // When the wallet gets connected, we are going to save the users's address
-    // in the component's state. So, if it hasn't been saved yet, we have
-    // to show the ConnectWallet component.
-    //
-    // Note that we pass it a callback that is going to be called when the user
-    // clicks a button. This callback just calls the _connectWallet method.
-    if (!this.state.selectedAddress) {
-      return (
-        <ConnectWallet 
-          connectWallet={() => this._connectWallet()} 
-          networkError={this.state.networkError}
-          dismiss={() => this._dismissNetworkError()}
-        />
-      );
-    }
-
-    // If the token data or the user's balance hasn't loaded yet, we show
-    // a loading component.
-    if (!this.state.tokenData || !this.state.balance) {
-      return <Loading />;
-    }
-
-    // If everything is loaded, we render the application.
+  renderEscrowTokenPage() {
     return (
-      <div className="container p-4">
+      <React.Fragment>
         <div className="row">
           <div className="col-12">
             <h1>
@@ -115,18 +87,18 @@ export class Dapp extends React.Component {
         <div className="row">
           <div className="col-12">
             {/* 
-              Sending a transaction isn't an immediate action. You have to wait
-              for it to be mined.
-              If we are waiting for one, we show a message here.
-            */}
+            Sending a transaction isn't an immediate action. You have to wait
+            for it to be mined.
+            If we are waiting for one, we show a message here.
+          */}
             {this.state.txBeingSent && (
               <WaitingForTransactionMessage txHash={this.state.txBeingSent} />
             )}
 
             {/* 
-              Sending a transaction can fail in multiple ways. 
-              If that happened, we show a message here.
-            */}
+            Sending a transaction can fail in multiple ways. 
+            If that happened, we show a message here.
+          */}
             {this.state.transactionError && (
               <TransactionErrorMessage
                 message={this._getRpcErrorMessage(this.state.transactionError)}
@@ -139,18 +111,18 @@ export class Dapp extends React.Component {
         <div className="row">
           <div className="col-12">
             {/*
-              If the user has no tokens, we don't show the Transfer form
-            */}
+            If the user has no tokens, we don't show the Transfer form
+          */}
             {this.state.balance.eq(0) && (
               <NoTokensMessage selectedAddress={this.state.selectedAddress} />
             )}
 
             {/*
-              This component displays a form that the user can use to send a 
-              transaction and transfer some tokens.
-              The component doesn't have logic, it just calls the transferTokens
-              callback.
-            */}
+            This component displays a form that the user can use to send a 
+            transaction and transfer some tokens.
+            The component doesn't have logic, it just calls the transferTokens
+            callback.
+          */}
             {this.state.balance.gt(0) && (
               <Transfer
                 transferTokens={(to, amount) =>
@@ -161,31 +133,84 @@ export class Dapp extends React.Component {
             )}
           </div>
         </div>
-      
+      </React.Fragment>
+    );
+  }
+
+  renderAllContractsPage() {
+    return (
       <div className="row">
         <div className="col-12">
-        <button 
-        type="button" 
-        className="btn btn-primary"
-        onClick={()=>{
-          // test whether or not we can depploy the escrow contract
-          deployEscrowContract("0x2961ad60fda7ef31ceed903386bc435e92b18b24", "0x2961ad60fda7ef31ceed903386bc435e92b18b24", 1000).then(async contract=>{
-            console.log("this is the response of deploy action", contract);
-            console.log("this is the contract address ", contract.address, "deployed by", this.state.selectedAddress);
-            postContract(contract.address, this.state.selectedAddress)
-            //now i will save the contract address to the centralized api
-          })
-          .catch(err=>console.log("error deploying contract", err))
-
-        }}
-
-
-        >Test a deploy of Escrow Contract
-        </button>
-
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={() => {
+              // test whether or not we can depploy the escrow contract
+              deployEscrowContract(
+                "0x2961ad60fda7ef31ceed903386bc435e92b18b24",
+                "0x2961ad60fda7ef31ceed903386bc435e92b18b24",
+                1000
+              )
+                .then(async (contract) => {
+                  console.log(
+                    "this is the response of deploy action",
+                    contract
+                  );
+                  console.log(
+                    "this is the contract address ",
+                    contract.address,
+                    "deployed by",
+                    this.state.selectedAddress
+                  );
+                  postContract(contract.address, this.state.selectedAddress);
+                  //now i will save the contract address to the centralized api
+                })
+                .catch((err) => console.log("error deploying contract", err));
+            }}
+          >
+            Test a deploy of Escrow Contract
+          </button>
         </div>
       </div>
+    );
+  }
 
+  render() {
+    // Ethereum wallets inject the window.ethereum object. If it hasn't been
+    // injected, we instruct the user to install MetaMask.
+    if (window.ethereum === undefined) {
+      return <NoWalletDetected />;
+    }
+
+    // The next thing we need to do, is to ask the user to connect their wallet.
+    // When the wallet gets connected, we are going to save the users's address
+    // in the component's state. So, if it hasn't been saved yet, we have
+    // to show the ConnectWallet component.
+    //
+    // Note that we pass it a callback that is going to be called when the user
+    // clicks a button. This callback just calls the _connectWallet method.
+    if (!this.state.selectedAddress) {
+      return (
+        <ConnectWallet
+          connectWallet={() => this._connectWallet()}
+          networkError={this.state.networkError}
+          dismiss={() => this._dismissNetworkError()}
+        />
+      );
+    }
+
+    // If the token data or the user's balance hasn't loaded yet, we show
+    // a loading component.
+    if (!this.state.tokenData || !this.state.balance) {
+      return <Loading />;
+    }
+
+    // If everything is loaded, we render the application.
+    return (
+      <div className="container p-4">
+        <Navbar />
+        {model.currentPage === "token" && this.renderEscrowTokenPage()}
+        {model.currentPage === "contracts" && this.renderAllContractsPage()}
       </div>
     );
   }
@@ -202,7 +227,9 @@ export class Dapp extends React.Component {
 
     // To connect to the user's wallet, we have to run this method.
     // It returns a promise that will resolve to the user's address.
-    const [selectedAddress] = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    const [selectedAddress] = await window.ethereum.request({
+      method: "eth_requestAccounts",
+    });
 
     // Once we have the address, we can initialize the application.
 
@@ -219,14 +246,14 @@ export class Dapp extends React.Component {
       // `accountsChanged` event can be triggered with an undefined newAddress.
       // This happens when the user removes the Dapp from the "Connected
       // list of sites allowed access to your addresses" (Metamask > Settings > Connections)
-      // To avoid errors, we reset the dapp state 
+      // To avoid errors, we reset the dapp state
       if (newAddress === undefined) {
         return this._resetState();
       }
-      
+
       this._initialize(newAddress);
     });
-    
+
     // We reset the dapp state if the network is changed
     window.ethereum.on("chainChanged", ([networkId]) => {
       this._stopPollingData();
@@ -257,7 +284,7 @@ export class Dapp extends React.Component {
     this._provider = new ethers.providers.Web3Provider(window.ethereum);
     // make the provider accessible through the window object
     window._provider = this._provider;
-    console.log("window provider", window._provider)
+    console.log("window provider", window._provider);
 
     // Then, we initialize the contract using that provider and the token's
     // artifact. You can do this same thing with your contracts.
@@ -386,16 +413,17 @@ export class Dapp extends React.Component {
     this.setState(this.initialState);
   }
 
-  // This method checks if Metamask selected network is Localhost:8545 
+  // This method checks if Metamask selected network is Localhost:8545
   _checkNetwork() {
     if (window.ethereum.networkVersion === HARDHAT_NETWORK_ID) {
       return true;
     }
 
-    this.setState({ 
-      networkError: 'Please connect Metamask to Localhost:8545'
+    this.setState({
+      networkError: "Please connect Metamask to Localhost:8545",
     });
 
     return false;
   }
 }
+export default observer(Dapp);
