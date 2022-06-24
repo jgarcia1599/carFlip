@@ -12,7 +12,8 @@
     "mobx-react": "^7.5.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1"
+    "react-scripts": "3.4.1",
+    "sass": "^1.53.0"
   },
   "scripts": {
     "start": "react-scripts start",

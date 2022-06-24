@@ -5,10 +5,16 @@ import {ethers} from 'ethers';
 export async function getContractInfoOnChain(contractAddress) {
     if(!window._provider) return;
     let contract = new ethers.Contract(contractAddress, Escrow.abi, window._provider);
-    console.log("contracttt", contract);
-    console.log("arbitreeer",await contract.arbiter())
-    console.log("depositor", await contract.depositor())
-    console.log("contract balance", await window._provider.getBalance(contract.address));
-    return contract
+    let contractArbiter = await contract.arbiter();
+    let contractDepositor = await contract.depositor();
+    let contractBeneficiary = await contract.beneficiary();
+    let contractBalance = ethers.utils.formatEther(await window._provider.getBalance(contract.address) );
+    return {
+        contractObject:contract,
+        contractArbiter: contractArbiter,
+        contractDepositor: contractDepositor,
+        contractBeneficiary:contractBeneficiary,
+        contractBalance: contractBalance
+    }
 }
 
