@@ -10,9 +10,6 @@ function Navbar() {
     </button>
     <div className="collapse navbar-collapse" id="navbarText">
       <ul className="navbar-nav mr-auto">
-        <li className={"nav-item" + (model.currentPage === "token" ? " active" : "")} onClick={()=>model.changePage("token")}>
-          <a className="nav-link" href="#">Escrow App Token</a>
-        </li>
         <li className={"nav-item" + (model.currentPage === "contracts" ? " active" : "")} onClick={()=>model.changePage("contracts")}>
           <a className="nav-link" href="#">Contracts</a>
         </li>
