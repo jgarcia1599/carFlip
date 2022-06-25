@@ -51,6 +51,24 @@ app.post("/post_contracts", async (req, res) => {
     res.status(400).json({ err: err.message });
   }
 });
+app.post("/approve/:contractAddress", async (req, res) => {
+  try {
+    let contractAddress = req.params["contractAddress"];
+    let contractRecordEntry = await db.models.contract_records.findOne({
+      where: {
+        contractAddress: contractAddress
+      },
+    });
+    await contractRecordEntry.update({isApproved:true})
+    res.json({
+      status: "success",
+      contractRecordEntry: contractRecordEntry[0],
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ err: err.message });
+  }
+});
 
 app.listen(port, () => {
   console.log(`App api listening on port ${port}`);

@@ -1,12 +1,10 @@
 import { observer } from "mobx-react";
 import React, { useEffect, useState } from "react";
 import model from "../model";
-import { postContract, getContracts } from "../utils/api";
+import { postContract, getContracts , contractIsApproved} from "../utils/api";
 import deployEscrowContract from "../utils/deployEscrowContract";
 import "./Contracts.scss";
-import { getContractInfoOnChain } from "../utils/ethers";
 function Contracts() {
-  let [contractObjects, setContractObjects] = useState([]);
   let [newArbitrer, setNewArbitrer] = useState("");
   let [newBeneficiary, setNewBeneficiary] = useState("");
   let [newContractAmount, setNewContractAmount] = useState("");
@@ -17,19 +15,15 @@ function Contracts() {
   }, []);
 
   function deployNewContract(){
-    console.log(      newArbitrer,
-      newBeneficiary,
-      newContractAmount)
-
     if(!newArbitrer || !newContractAmount || !newBeneficiary) return
     deployEscrowContract(
       newArbitrer,
       newBeneficiary,
       newContractAmount
     )
-    .then((contract) => {
-      console.log("this is the response of deploy action", contract);
-      console.log("this is the contract address ", contract.address);
+    .then(async (contract) => {
+      setContractDeployError(false);
+      await contract.deployTransaction.wait();
       postContract(contract.address, model.userAddress);
       //now i will save the contract address to the centralized api
     })
@@ -69,8 +63,19 @@ function Contracts() {
               <div> Value </div>
               <div> {contractInfo.contractBalance} ETH</div>
             </li>
-            <div className="button" id="${buttonId}">
-              Approve
+            <div className={contractData.isApproved ? "complete" : "button"} id={contractData.contractAddress} onClick={async ()=>{
+              if(contractData.isApproved) return;
+              const contract = contractInfo.contractObject
+                const signer = window._provider.getSigner();
+               contract.connect(signer).approve().then(()=>{
+                contractIsApproved(contractData.contractAddress)
+               }).catch((err)=>{
+                setContractDeployError(true)
+                console.log("error deploying contract", err)
+
+               })
+            }}>
+              {contractData.isApproved ? "This contract has been approved!" : "Approve"}
             </div>
           </ul>
         </div>
@@ -94,7 +99,7 @@ function Contracts() {
           </label>
 
           <label>
-            Deposit Amount (in Wei)
+            Deposit Amount (in ETH)
             <input type="text" id="wei"  value={newContractAmount} onChange={(e)=>setNewContractAmount(e.target.value)}/>
           </label>
 
@@ -103,33 +108,10 @@ function Contracts() {
           </div>
           {contractDeployError && <div class="alert alert-danger" role="alert">
             
-            Error deploying the contract! Make sure you filled out the form correctly!
+            Error interacting with the contract! Make sure you filled out the form correctly!
 
             </div>}
         </div>
-
-        <button
-          type="button"
-          className="btn btn-primary"
-          onClick={() => {
-            // test whether or not we can depploy the escrow contract
-            deployEscrowContract(
-              "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-              "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-              1000
-            )
-              .then(async (contract) => {
-                await contract.deployTransaction.wait()
-                console.log("this is the response of deploy action", contract);
-                console.log("this is the contract address ", contract.address);
-                postContract(contract.address, model.userAddress);
-                //now i will save the contract address to the centralized api
-              })
-              .catch((err) => console.log("error deploying contract", err));
-          }}
-        >
-          Test a deploy of Escrow Contract
-        </button>
       </div>
       <div className="col-6">
         {renderDeployedContract()}

@@ -14,6 +14,11 @@ module.exports = async (sequelize) => {
       userAddress: {
         type: DataTypes.STRING,
         allowNull: false
+      },
+      isApproved: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue:false
       }
     }
   );

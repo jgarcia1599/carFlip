@@ -46,3 +46,17 @@ export function postContract(contractAddress, userAddress) {
       });
   });
 }
+export function contractIsApproved(contractAddress) {
+  return new Promise((resolve, reject) => {
+    axios
+      .post(`${configuration.API_LINK}/approve/${contractAddress}`, {}, apiConfig())
+      .then((response) => {
+        console.log("post a contract", response.data);
+        getContracts();
+        resolve();
+      })
+      .catch((error) => {
+        reject(error.response.data.message);
+      });
+  });
+}

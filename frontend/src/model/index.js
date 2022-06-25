@@ -4,7 +4,7 @@ import { getContractInfoOnChain } from "../utils/ethers";
 
 // Model the application state.
 class Model {
-  currentPage = "token";
+  currentPage = "contracts";
   contracts = [];
   contractInfo = {};
   userAddress = null;
