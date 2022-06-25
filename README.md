@@ -16,10 +16,10 @@ npx hardhat node
 ```
 
 
-- Deploy smart contracts
+- Compile Smart Contract
 
 ```
-npx hardhat --network localhost run scripts/deploy.js
+npx hardhat --network localhost compile
 ```
 
 -  Run API

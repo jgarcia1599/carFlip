@@ -38,7 +38,6 @@ function Contracts() {
 
   function renderDeployedContract(){
     if(!(model.contracts && model.contracts.length > 0)) return;
-      
     return model.contracts.map((contractData) => {
       let contractInfo = model.contractInfo[contractData.contractAddress];
       if(!contractInfo) return;

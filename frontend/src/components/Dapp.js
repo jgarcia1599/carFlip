@@ -15,8 +15,6 @@ import contractAddress from "../contracts/contract-address.json";
 import { NoWalletDetected } from "./NoWalletDetected";
 import { ConnectWallet } from "./ConnectWallet";
 import { Loading } from "./Loading";
-import deployEscrowContract from "../utils/deployEscrowContract";
-import { postContract } from "../utils/api";
 import Navbar from "./Navbar";
 import model from "../model";
 import Contracts from "./Contracts";
@@ -93,7 +91,7 @@ class Dapp extends React.Component {
 
     // If everything is loaded, we render the application.
     return (
-      <div className="container p-4">
+      <div>
         <Navbar />
         {model.currentPage === "contracts" && <Contracts />}
       </div>

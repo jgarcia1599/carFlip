@@ -3,8 +3,8 @@ import model from "../model";
 import {observer} from "mobx-react";
 
 function Navbar() {
-    return <nav className="navbar navbar-expand-lg navbar-light bg-light">
-    <a className="navbar-brand" href="#">Escrow</a>
+    return <nav className="navbar navbar-expand-lg navbar-light bg-light nav-fill w-100">
+    <a className="navbar-brand" href="#">CarFlip 🚗</a>
     <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
       <span className="navbar-toggler-icon"></span>
     </button>
@@ -15,7 +15,7 @@ function Navbar() {
         </li>
       </ul>
       <span className="navbar-text">
-        Making Escrow Connections easier
+        <b>User:</b> {model.userAddress}
       </span>
     </div>
   </nav>
