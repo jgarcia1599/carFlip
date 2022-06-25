@@ -19,6 +19,9 @@ module.exports = async (sequelize) => {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue:false
+      },
+      filePath: {
+        type: DataTypes.STRING
       }
     }
   );

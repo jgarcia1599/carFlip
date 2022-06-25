@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const fileupload = require("express-fileupload");
 const cors = require("cors");
 const port = 3042;
 
@@ -11,6 +12,8 @@ const db = require("./db");
 // localhost can have cross origin errors
 // depending on the browser you use!
 app.use(cors());
+app.use(fileupload());
+app.use(express.static("files"));
 app.use(express.json());
 
 //include DB setup and wait for async function to finish
@@ -68,6 +71,39 @@ app.post("/approve/:contractAddress", async (req, res) => {
     console.log(err);
     res.status(400).json({ err: err.message });
   }
+});
+
+app.post("/:contractAddress/uploadContractCheckup", (req, res) => {
+
+  try {
+    console.log("hiii")
+    let contractAddress = req.params["contractAddress"];
+    const newpath = __dirname + "/files/";
+    const file = req.files.file;
+    console.log("fileee", file)
+    const filename = file.name;
+    file.mv(`${newpath}${filename}`, async (err) => {
+      if (err) {
+        res.status(500).send({ message: "File upload failed", code: 200 });
+      }
+      console.log("success yaya")
+
+      let contractRecordEntry = await db.models.contract_records.findOne({
+        where: {
+          contractAddress: contractAddress
+        },
+      });
+      await contractRecordEntry.update({filePath:`${newpath}${filename}`})
+  
+      res.status(200).send({ message: "File Uploaded", code: 200 });
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ err: err.message });
+  }
+
+
+
 });
 
 app.listen(port, () => {

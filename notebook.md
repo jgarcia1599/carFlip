@@ -22,3 +22,12 @@ things to do:
 - show all contracts in UI
 - allow user to dploy excrow contract without beneficiary or aarbitrer
 - allow users to be beneficiaries or arbitrers of any contract
+
+
+Saturday June 26
+To do list:
+-  X add upload file mockup to app to confirm that the car has gone through an inspection and car details to new contract form
+- change escrow contract so that the escrow gets a cut of the transaction
+- add i am the escrow filter funcitonality to contracts so that a user can act as the escrow
+- keep track of how many contracts a user has escrowed
+- in approved contracts, allow users to rate the escrow. 

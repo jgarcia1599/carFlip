@@ -28,6 +28,18 @@ export function getContracts() {
   });
 }
 
+export async function uploadFile(file, fileName, contractAddress){
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("fileName", fileName);
+  try {
+    const res = await axios.post(`${configuration.API_LINK}/`+contractAddress+`/uploadContractCheckup`, formData, apiConfig())
+    console.log(res);
+  } catch (ex) {
+    console.log(ex);
+  }
+};
+
 export function postContract(contractAddress, userAddress) {
   let data = {
     contractAddress: contractAddress,

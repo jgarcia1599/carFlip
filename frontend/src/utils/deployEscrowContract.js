@@ -6,7 +6,8 @@ import { ethers, BigNumber } from "ethers";
 export default async function deployEscrowContract(
   arbiter,
   beneficiary,
-  value
+  value,
+  carVIN
 ) {
   if (!window._provider) return;
   // transform value from eth to wei
@@ -17,5 +18,5 @@ export default async function deployEscrowContract(
     Escrow.bytecode,
     signer
   );
-  return factory.deploy(arbiter, beneficiary, { value:ethers.utils.parseEther(value)});
+  return factory.deploy(arbiter, beneficiary, carVIN ,{ value:ethers.utils.parseEther(value)});
 }

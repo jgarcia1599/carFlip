@@ -8,13 +8,17 @@ export async function getContractInfoOnChain(contractAddress) {
     let contractArbiter = await contract.arbiter();
     let contractDepositor = await contract.depositor();
     let contractBeneficiary = await contract.beneficiary();
+    let carVIN = await contract.carVIN();
+    let isCarInspected = await contract.isCarOk();
     let contractBalance = ethers.utils.formatEther(await window._provider.getBalance(contract.address) );
     return {
         contractObject:contract,
         contractArbiter: contractArbiter,
         contractDepositor: contractDepositor,
         contractBeneficiary:contractBeneficiary,
-        contractBalance: contractBalance
+        contractBalance: contractBalance,
+        carVIN:carVIN,
+        isCarInspected:isCarInspected
     }
 }
 
