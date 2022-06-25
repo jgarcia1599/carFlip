@@ -1,4 +1,6 @@
-# Chainshot Final Project
+# CarFlip 🚗
+A platform to facilitate car ownership transfers by leveraging the Ethereum Blockchain. 
+
 
 Test accounts Hardhat 
 Account 2: 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
