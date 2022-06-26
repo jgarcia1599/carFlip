@@ -27,6 +27,21 @@ export function getContracts() {
       });
   });
 }
+export function getEscrowAgentStats() {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`${configuration.API_LINK}/escrow/stats`, apiConfig())
+      .then((response) => {
+        console.log("escrowagents", response.data);
+        model.escrowAgents = response.data.escrowAgents;
+        resolve();
+      })
+      .catch((error) => {
+        console.log(error)
+        reject();
+      });
+  });
+}
 
 export async function uploadFile(file, fileName, contractAddress){
   const formData = new FormData();
@@ -44,6 +59,7 @@ export function postContract(contractAddress, userAddress) {
   let data = {
     contractAddress: contractAddress,
     userAddress: userAddress,
+
   };
   return new Promise((resolve, reject) => {
     axios
@@ -51,6 +67,25 @@ export function postContract(contractAddress, userAddress) {
       .then((response) => {
         console.log("post a contract", response.data);
         getContracts();
+        resolve();
+      })
+      .catch((error) => {
+        reject(error.response.data.message);
+      });
+  });
+}
+export function updateEscrowAgentStats(newContractsCommissioned,newCommision, escrowAgentadddress, review) {
+  let data = {
+    newContractsCommissioned: newContractsCommissioned,
+    commissionEarned: newCommision,
+    review:review
+  };
+  return new Promise((resolve, reject) => {
+    axios
+      .post(`${configuration.API_LINK}/escrow/${escrowAgentadddress}/updateStats`, data, apiConfig())
+      .then((response) => {
+        console.log("pupdate escrwo agents", response.data);
+        getEscrowAgentStats();
         resolve();
       })
       .catch((error) => {

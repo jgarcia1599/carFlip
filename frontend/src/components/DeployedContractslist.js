@@ -7,6 +7,7 @@ import {
   getContracts,
   contractIsApproved,
   uploadFile,
+  updateEscrowAgentStats
 } from "../utils/api";
 import deployEscrowContract from "../utils/deployEscrowContract";
 import "./Contracts.scss";
@@ -31,7 +32,6 @@ function DeployedContractsList () {
         {model.contracts.map((contractData) => {
           let contractInfo = model.contractInfo[contractData.contractAddress];
           if (!contractInfo) return;
-          console.log("contract info", window.toJS(contractInfo))
           return (
             <div
               key={contractData.contractAddress}
@@ -134,6 +134,8 @@ function DeployedContractsList () {
                       .approve()
                       .then(() => {
                         contractIsApproved(contractData.contractAddress);
+                        let commisionEarned = (contractInfo.escrowAgentCommission.toNumber() * contractInfo.carPrice.toNumber()) / 100;
+                        updateEscrowAgentStats(1, commisionEarned, model.userAddress)
                       })
                       .catch((err) => {
                         setContractDeployError(true);

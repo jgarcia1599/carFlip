@@ -18,6 +18,7 @@ import { Loading } from "./Loading";
 import Navbar from "./Navbar";
 import model from "../model";
 import Contracts from "./Contracts";
+import EscrowAgentStats from "./EscrowAgentsStats";
 
 // This is the Hardhat Network id, you might change it in the hardhat.config.js.
 // If you are using MetaMask, be sure to change the Network id to 1337.
@@ -94,6 +95,7 @@ class Dapp extends React.Component {
       <div>
         <Navbar />
         {model.currentPage === "contracts" && <Contracts />}
+        {model.currentPage === "escrow" && <EscrowAgentStats />}
       </div>
     );
   }

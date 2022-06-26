@@ -2,7 +2,7 @@ const { applyAssociations } = require("./associations");
 const sequelize = require("./index");
 
 // We define all models according to their files.
-const modelDefiners = [require("./models/contract_records.model")];
+const modelDefiners = [require("./models/contract_records.model"), require("./models/escrow_agents.model")];
 
 async function setupDB(force_sync = false) {
   try {

@@ -59,10 +59,10 @@ app.post("/approve/:contractAddress", async (req, res) => {
     let contractAddress = req.params["contractAddress"];
     let contractRecordEntry = await db.models.contract_records.findOne({
       where: {
-        contractAddress: contractAddress
+        contractAddress: contractAddress,
       },
     });
-    await contractRecordEntry.update({isApproved:true})
+    await contractRecordEntry.update({ isApproved: true });
     res.json({
       status: "success",
       contractRecordEntry: contractRecordEntry[0],
@@ -72,38 +72,84 @@ app.post("/approve/:contractAddress", async (req, res) => {
     res.status(400).json({ err: err.message });
   }
 });
+app.post("/escrow/:agentAddress/updateStats", async (req, res) => {
+  try {
+    let agentAddress = req.params["agentAddress"];
+    let contractsCommisioned = req.body["newContractsCommissioned"];
+    let commisionEarned = req.body["commissionEarned"];
+    let newReview = req.body["review"];
+    let escrowAgentEntry = await db.models.escrow_agents.findOrCreate({
+      where: {
+        agentAddress: agentAddress,
+      },
+    });
+    let escrowAgent = escrowAgentEntry[0];
+    if (contractsCommisioned && commisionEarned) {
+      let newContractsCommissioned =
+        escrowAgent.contractsEscrowed + contractsCommisioned;
+      await escrowAgent.update({
+        contractsEscrowed: newContractsCommissioned,
+      });
+      let newComissionEarned = escrowAgent.commissionEarned + commisionEarned;
+      await escrowAgent.update({
+        commissionEarned: newComissionEarned,
+      });
+    }
+    if (newReview) {
+      let newReviewsRecieved = escrowAgent.reviewsReceived + 1;
+      let newAvgReview =
+        (escrowAgent.reviewsReceived * escrowAgent.avgReview + newReview) /
+        newReviewsRecieved;
+      await escrowAgent.update({ reviewsReceived: newReviewsRecieved });
+      await escrowAgent.update({ avgReview: newAvgReview });
+    }
+    res.json({
+      status: "success",
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ err: err.message });
+  }
+});
+app.get("/escrow/stats", async (req, res) => {
+  try {
+    let records = await db.models.escrow_agents.findAll();
+    res.json({
+      status: "success",
+      escrowAgents: records,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ err: err.message });
+  }
+});
 
 app.post("/:contractAddress/uploadContractCheckup", (req, res) => {
-
   try {
-    console.log("hiii")
     let contractAddress = req.params["contractAddress"];
     const newpath = __dirname + "/files/";
     const file = req.files.file;
-    console.log("fileee", file)
+    console.log("fileee", file);
     const filename = file.name;
     file.mv(`${newpath}${filename}`, async (err) => {
       if (err) {
         res.status(500).send({ message: "File upload failed", code: 200 });
       }
-      console.log("success yaya")
+      console.log("success yaya");
 
       let contractRecordEntry = await db.models.contract_records.findOne({
         where: {
-          contractAddress: contractAddress
+          contractAddress: contractAddress,
         },
       });
-      await contractRecordEntry.update({filePath:`${newpath}${filename}`})
-  
+      await contractRecordEntry.update({ filePath: `${newpath}${filename}` });
+
       res.status(200).send({ message: "File Uploaded", code: 200 });
     });
   } catch (err) {
     console.log(err);
     res.status(400).json({ err: err.message });
   }
-
-
-
 });
 
 app.listen(port, () => {

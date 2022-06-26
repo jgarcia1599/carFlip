@@ -8,6 +8,7 @@ class Model {
   contracts = [];
   contractInfo = {};
   userAddress = null;
+  escrowAgents = [];
   constructor() {
     makeAutoObservable(this, { changePage: action });
   }
