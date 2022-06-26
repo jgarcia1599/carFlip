@@ -17,6 +17,8 @@ After the above process culminates, car buyers and sellers can rate the escrow a
 
 ## Installation Steps
 
+<b>Disclaimer:</b> This app was developed and tested only in the hardhat local network. If you want to test it on any other testnet or on mainnet, you would have to undergo the development necessary for the app to work in such environments. 
+
 - Install Metamask
 - Delete unnecessary files created during development
 ```
