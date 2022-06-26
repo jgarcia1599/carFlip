@@ -32,7 +32,7 @@ npm install
 ```
 npx hardhat node
 ```
-- Connect metamask ot hardhat local network
+- Connect metamask to hardhat local network
 - Grab 3 accounts from the hardhat local network and import them into metamask. If you are setting up the app again after some usage, it helps to reset the account as the local network has no remembrance of previous transactions, hence creating nonce related transaction errors. Go to Settings > Advanced > Reset Account in metamask and click on Reset Account to delete all history. 
 - Compile Smart Contract
 ```
