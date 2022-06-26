@@ -1,8 +1,8 @@
 # CarFlip 🚗
 A platform to facilitate car ownership transfers by leveraging the Ethereum Blockchain. 
 
-<im src="docs/app_image_1.png"/>
-<im src="docs/app_image_2.png"/>
+<img src="docs/app_image_1.png"/>
+<img src="docs/app_image_2.png"/>
 
 ## Description
 CarFlip is a Dapp platform that facilitates car ownership transfers by leveraging the Ethereum Blockchain. It is an escrow-type application that makes it easier for car buyers and sellers to transfer car ownership through a three-step process that renders powerful third-party intermediaries useless. In places where the second-hand car market is completely saturated, it becomes challenging for both car buyers and sellers to undergo the car ownership transfer process efficiently. Car Sellers often need to scour through thousands of fraudulent car buy requests, leading them to outsource this process through intermediaries that charge very high commission fees. Car Buyers often need to rely on such intermediaries to find a reliable car and buyer. However, such intermediaries often play in cahoots with the car buyer as they are paying them, leaving the car buyer blind-sighted from the intrinsic details of the car transfer process. With this Dapp, car buyers and sellers can rely on anonymous escrow agents to ensure that the process is legitimate. Escrow Agents gain recognition through an in-app review system, and the app (through smart contracts) guarantees that a certified car shop has inspected the car before the money transfer occurs. 
