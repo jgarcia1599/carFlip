@@ -1,5 +1,6 @@
 import { observer } from "mobx-react";
 import React, { useEffect, useState } from "react";
+import {ethers} from 'ethers';
 import model from "../model";
 import {
   postContract,
@@ -10,8 +11,9 @@ import {
 import deployEscrowContract from "../utils/deployEscrowContract";
 import "./Contracts.scss";
 function Contracts() {
-  let [newArbitrer, setNewArbitrer] = useState("");
-  let [newBeneficiary, setNewBeneficiary] = useState("");
+  let [escrowAgent, setNewEscrowAgent] = useState("");
+  let [newCarBuyer, setNewCarBuyer] = useState("");
+  let [newCommision, setNewCommision] = useState(1);
   let [newContractAmount, setNewContractAmount] = useState("");
   let [newCarVIN, setNewCarVin] = useState("");
   let [contractDeployError, setContractDeployError] = useState(false);
@@ -29,10 +31,17 @@ function Contracts() {
   };
 
   function deployNewContract() {
-    if (!newArbitrer || !newContractAmount || !newBeneficiary) return;
+    console.log     ("agent "+ escrowAgent,
+      "buyer "+newCarBuyer,
+      "commision "+newCommision, 
+      "car price" + newContractAmount,
+      "car vin" + newCarVIN)
+    if (!escrowAgent || !newContractAmount || !newCarBuyer || !newCommision || !newCarVIN) return;
+
     deployEscrowContract(
-      newArbitrer,
-      newBeneficiary,
+      escrowAgent,
+      newCarBuyer,
+      newCommision, 
       newContractAmount,
       newCarVIN
     )
@@ -46,9 +55,11 @@ function Contracts() {
         setContractDeployError(true);
         console.log("error deploying contract", err);
       });
-    setNewArbitrer("");
-    setNewBeneficiary("");
+    setNewEscrowAgent("");
+    setNewCarBuyer("");
     setNewContractAmount("");
+    setNewCommision(1);
+    setNewCarVin("");
   }
 
   function renderDeployedContract() {
@@ -66,9 +77,9 @@ function Contracts() {
             >
               <ul className="fields">
               {model.userAddress ===
-                  contractInfo.contractArbiter.toLowerCase() && contractData.isApproved === false &&(
+                  contractInfo.escrowAgent.toLowerCase() && contractData.isApproved === false &&(
                     <div class={"alert alert-" + (contractInfo.isCarInspected === true ? "success" : "warning")} role="alert">
-                      I am the Escrow of this contract. {contractInfo.isCarInspected === true? "This contract is ready to be approved as the car has been inspected by the new prospective owner." : "This contract must first be inspected by the beneficiary before I can approve it"}
+                      I am the Escrow of this contract. {contractInfo.isCarInspected === true? "This contract is ready to be approved as the car has been inspected by the new prospective owner." : "This contract must first be inspected by the car buyer before I can approve it"}
                     </div>
                   )}
                 <li>
@@ -76,20 +87,24 @@ function Contracts() {
                   <div> {contractInfo.carVIN} </div>
                 </li>
                 <li>
-                  <div> Arbiter </div>
-                  <div> {contractInfo.contractArbiter} </div>
+                  <div> Escrow Agent </div>
+                  <div> {contractInfo.escrowAgent} </div>
                 </li>
                 <li>
-                  <div> Beneficiary </div>
-                  <div> {contractInfo.contractBeneficiary} </div>
+                  <div> Car Seller </div>
+                  <div> {contractInfo.carSeller} </div>
                 </li>
                 <li>
-                  <div> Depositor </div>
-                  <div> {contractInfo.contractDepositor} </div>
+                  <div> Car Buyer </div>
+                  <div> {contractInfo.carBuyer} </div>
                 </li>
                 <li>
-                  <div> Value </div>
-                  <div> {contractInfo.contractBalance} ETH</div>
+                  <div> Car Price </div>
+                  <div> {contractInfo.carPrice.toNumber()} ETH</div>
+                </li>
+                <li>
+                  <div> Commision </div>
+                  <div> {contractInfo.escrowAgentCommission.toNumber()} %</div>
                 </li>
                 <li>
                   <div> Is Car Inspected ✔️?  </div>
@@ -103,8 +118,8 @@ function Contracts() {
                 </li>
         }
                 {model.userAddress ===
-                  contractInfo.contractBeneficiary.toLowerCase() &&
-                  !contractData.filePath && (
+                  contractInfo.carBuyer.toLowerCase() &&
+                  (!contractData.filePath || contractInfo.isCarInspected === false) && (
                     <div class="alert alert-primary" role="alert">
                       <p>
                         As the prospective new owner of Car:{" "}
@@ -127,7 +142,7 @@ function Contracts() {
                             const signer = window._provider.getSigner();
                             contract
                               .connect(signer)
-                              .carIsOkay()
+                              .carIsOkay( { value:ethers.utils.parseEther(`${contractInfo.carPrice.toNumber()}`)})
                               .then(() => {
                                 setFile("");
                                 setFileName("");
@@ -191,30 +206,39 @@ function Contracts() {
             />
           </label>
           <label>
-            Arbiter Address
+            Escrow Agent Address
             <input
               type="text"
-              id="arbiter"
-              value={newArbitrer}
-              onChange={(e) => setNewArbitrer(e.target.value)}
+              id="escrow"
+              value={escrowAgent}
+              onChange={(e) => setNewEscrowAgent(e.target.value)}
             />
           </label>
 
           <label>
-            Beneficiary Address
+            Car Buyer Address
             <input
               type="text"
-              id="beneficiary"
-              value={newBeneficiary}
-              onChange={(e) => setNewBeneficiary(e.target.value)}
+              id="carBuyer"
+              value={newCarBuyer}
+              onChange={(e) => setNewCarBuyer(e.target.value)}
+            />
+          </label>
+          <label>
+            Escrow Agent Commision
+            <input
+              type="number"
+              id="escrowCommision"
+              value={newCommision}
+              onChange={(e) => setNewCommision(e.target.value)}
             />
           </label>
 
           <label>
-            Deposit Amount (in ETH)
+            Car Selling Price (in ETH)
             <input
               type="text"
-              id="wei"
+              id="eth"
               value={newContractAmount}
               onChange={(e) => setNewContractAmount(e.target.value)}
             />

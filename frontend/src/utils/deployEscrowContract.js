@@ -4,11 +4,15 @@ import Escrow from "./../artifacts/contracts/Escrow.sol/Escrow.json";
 import { ethers, BigNumber } from "ethers";
 
 export default async function deployEscrowContract(
-  arbiter,
-  beneficiary,
-  value,
+  escrowAgent,
+  carBuyer,
+  commision, 
+  carPrice,
   carVIN
 ) {
+  console.log(
+    "ijsfconwowevmd"
+  )
   if (!window._provider) return;
   // transform value from eth to wei
   await window.ethereum.request({ method: "eth_requestAccounts" });
@@ -18,5 +22,6 @@ export default async function deployEscrowContract(
     Escrow.bytecode,
     signer
   );
-  return factory.deploy(arbiter, beneficiary, carVIN ,{ value:ethers.utils.parseEther(value)});
+  //{ value:ethers.utils.parseEther(value)}
+  return factory.deploy(escrowAgent, carBuyer,commision, carPrice, carVIN );
 }
