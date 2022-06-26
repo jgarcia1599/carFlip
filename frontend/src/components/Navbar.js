@@ -13,6 +13,9 @@ function Navbar() {
         <li className={"nav-item" + (model.currentPage === "contracts" ? " active" : "")} onClick={()=>model.changePage("contracts")}>
           <a className="nav-link" href="#">Contracts</a>
         </li>
+        <li className={"nav-item" + (model.currentPage === "escrow" ? " active" : "")} onClick={()=>model.changePage("escrow")}>
+          <a className="nav-link" href="#">Escrow Agents</a>
+        </li>
       </ul>
       <span className="navbar-text">
         <b>User:</b> {model.userAddress}
