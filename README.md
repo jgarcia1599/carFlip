@@ -1,11 +1,19 @@
 # CarFlip 🚗
 A platform to facilitate car ownership transfers by leveraging the Ethereum Blockchain. 
 
+<im src="docs/app_image_1.png"/>
+<im src="docs/app_image_2.png"/>
 
-Test accounts Hardhat 
-Account 2: 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
-Account 3: 0x70997970C51812dc3A010C7d01b50e0d17dc79C8
-Account 4: 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC
+## Description
+CarFlip is a Dapp platform that facilitates car ownership transfers by leveraging the Ethereum Blockchain. It is an escrow-type application that makes it easier for car buyers and sellers to transfer car ownership through a three-step process that renders powerful third-party intermediaries useless. In places where the second-hand car market is completely saturated, it becomes challenging for both car buyers and sellers to undergo the car ownership transfer process efficiently. Car Sellers often need to scour through thousands of fraudulent car buy requests, leading them to outsource this process through intermediaries that charge very high commission fees. Car Buyers often need to rely on such intermediaries to find a reliable car and buyer. However, such intermediaries often play in cahoots with the car buyer as they are paying them, leaving the car buyer blind-sighted from the intrinsic details of the car transfer process. With this Dapp, car buyers and sellers can rely on anonymous escrow agents to ensure that the process is legitimate. Escrow Agents gain recognition through an in-app review system, and the app (through smart contracts) guarantees that a certified car shop has inspected the car before the money transfer occurs. 
+
+<b>Our three steps process is as follows:</b>
+- Car Seller issues a contract with the desired car price, car buyer address, desired escrow agent address,  and commission to give to the escrow agent.  
+- Car Buyer is now free to take the car through an inspection with the car owner to a certified car shop to ensure the vehicle is in pristine condition before the money transfer occurs. After the car buyer inspects the car and uploads the inspection report to the app, the money is transferred to the smart contract. 
+- The Escrow Agent can now review the inspection report and approve the transaction, which sends the money to the car seller and the commission to the escrow agent.
+
+After the above process culminates, car buyers and sellers can rate the escrow agent. The escrow agents' performance stats are publicly shown in the app for transparency and reliability. 
+
 
 ## Installation Steps
 
@@ -13,6 +21,10 @@ Account 4: 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC
 - Delete unnecessary files created during development
 ```
 bash ./remove-files.sh
+```
+- Install all dependencies
+```
+npm install
 ```
 - Run hardhat local network
 ```
@@ -24,9 +36,7 @@ npx hardhat node
 ```
 npx hardhat --network localhost compile
 ```
-
 -  Run API
-
 ```
 nodemon api/index.js
 ```
@@ -46,6 +56,15 @@ postgres=# create user hardhatuser with encrypted password 'hardhatpassword';
 postgres=# grant all privileges on database hardhat to hardhatuser;
 ```
 The connection string for the above db would be ```postgres://hardhatuser:hardhatpassword@127.0.0.1:5432/hardhat```.
+
+
+# Miscellaneous 
+## Sample Test accounts Hardhat 
+Account 2: 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+Account 3: 0x70997970C51812dc3A010C7d01b50e0d17dc79C8
+Account 4: 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC
+
+
 
 <b>Everything written below this line is the hardhat boilerplate project documentation...</b>
 
