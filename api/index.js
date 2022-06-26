@@ -65,7 +65,31 @@ app.post("/approve/:contractAddress", async (req, res) => {
     await contractRecordEntry.update({ isApproved: true });
     res.json({
       status: "success",
-      contractRecordEntry: contractRecordEntry[0],
+      contractRecordEntry: contractRecordEntry,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ err: err.message });
+  }
+});
+app.post("/submittedReview/:contractAddress", async (req, res) => {
+  try {
+    let whoSubmittedReview = req.body["by"];
+    let contractAddress = req.params["contractAddress"];
+    let contractRecordEntry = await db.models.contract_records.findOne({
+      where: {
+        contractAddress: contractAddress,
+      },
+    });
+    if (whoSubmittedReview === "carBuyer") {
+      await contractRecordEntry.update({ carBuyerSubmittedReview: true });
+    } else if (whoSubmittedReview === "carSeller") {
+      await contractRecordEntry.update({ carSellerSubmittedReview: true });
+    }
+
+    res.json({
+      status: "success",
+      contractRecordEntry: contractRecordEntry,
     });
   } catch (err) {
     console.log(err);

@@ -22,7 +22,7 @@ export function getContracts() {
         resolve();
       })
       .catch((error) => {
-        console.log(error)
+        console.log(error);
         reject();
       });
   });
@@ -37,29 +37,32 @@ export function getEscrowAgentStats() {
         resolve();
       })
       .catch((error) => {
-        console.log(error)
+        console.log(error);
         reject();
       });
   });
 }
 
-export async function uploadFile(file, fileName, contractAddress){
+export async function uploadFile(file, fileName, contractAddress) {
   const formData = new FormData();
   formData.append("file", file);
   formData.append("fileName", fileName);
   try {
-    const res = await axios.post(`${configuration.API_LINK}/`+contractAddress+`/uploadContractCheckup`, formData, apiConfig())
+    const res = await axios.post(
+      `${configuration.API_LINK}/` + contractAddress + `/uploadContractCheckup`,
+      formData,
+      apiConfig()
+    );
     console.log(res);
   } catch (ex) {
     console.log(ex);
   }
-};
+}
 
 export function postContract(contractAddress, userAddress) {
   let data = {
     contractAddress: contractAddress,
     userAddress: userAddress,
-
   };
   return new Promise((resolve, reject) => {
     axios
@@ -74,15 +77,24 @@ export function postContract(contractAddress, userAddress) {
       });
   });
 }
-export function updateEscrowAgentStats(newContractsCommissioned,newCommision, escrowAgentadddress, review) {
+export function updateEscrowAgentStats(
+  newContractsCommissioned,
+  newCommision,
+  escrowAgentadddress,
+  review
+) {
   let data = {
     newContractsCommissioned: newContractsCommissioned,
     commissionEarned: newCommision,
-    review:review
+    review: review,
   };
   return new Promise((resolve, reject) => {
     axios
-      .post(`${configuration.API_LINK}/escrow/${escrowAgentadddress}/updateStats`, data, apiConfig())
+      .post(
+        `${configuration.API_LINK}/escrow/${escrowAgentadddress}/updateStats`,
+        data,
+        apiConfig()
+      )
       .then((response) => {
         console.log("pupdate escrwo agents", response.data);
         getEscrowAgentStats();
@@ -96,9 +108,33 @@ export function updateEscrowAgentStats(newContractsCommissioned,newCommision, es
 export function contractIsApproved(contractAddress) {
   return new Promise((resolve, reject) => {
     axios
-      .post(`${configuration.API_LINK}/approve/${contractAddress}`, {}, apiConfig())
+      .post(
+        `${configuration.API_LINK}/approve/${contractAddress}`,
+        {},
+        apiConfig()
+      )
       .then((response) => {
         console.log("post a contract", response.data);
+        getContracts();
+        resolve();
+      })
+      .catch((error) => {
+        reject(error.response.data.message);
+      });
+  });
+}
+export function submittedReview(contractAddress, by = "carBuyer") {
+  let data = {
+    by: by,
+  };
+  return new Promise((resolve, reject) => {
+    axios
+      .post(
+        `${configuration.API_LINK}/submittedReview/${contractAddress}`,
+        data,
+        apiConfig()
+      )
+      .then((response) => {
         getContracts();
         resolve();
       })

@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import React, { useEffect, useState } from "react";
-import {ethers} from 'ethers';
+import { ethers } from "ethers";
 import model from "../model";
 import {
   postContract,
@@ -32,17 +32,26 @@ function Contracts() {
   };
 
   function deployNewContract() {
-    console.log     ("agent "+ escrowAgent,
-      "buyer "+newCarBuyer,
-      "commision "+newCommision, 
+    console.log(
+      "agent " + escrowAgent,
+      "buyer " + newCarBuyer,
+      "commision " + newCommision,
       "car price" + newContractAmount,
-      "car vin" + newCarVIN)
-    if (!escrowAgent || !newContractAmount || !newCarBuyer || !newCommision || !newCarVIN) return;
+      "car vin" + newCarVIN
+    );
+    if (
+      !escrowAgent ||
+      !newContractAmount ||
+      !newCarBuyer ||
+      !newCommision ||
+      !newCarVIN
+    )
+      return;
 
     deployEscrowContract(
       escrowAgent,
       newCarBuyer,
-      newCommision, 
+      newCommision,
       newContractAmount,
       newCarVIN
     )
@@ -124,14 +133,16 @@ function Contracts() {
             Deploy
           </div>
           {contractDeployError && (
-            <div class="alert alert-danger" role="alert">
-              Error deploying the contract! Make sure you filled out the
-              form correctly!
+            <div className="alert alert-danger" role="alert">
+              Error deploying the contract! Make sure you filled out the form
+              correctly!
             </div>
           )}
         </div>
       </div>
-      <div className="col-6"><DeployedContractsList/></div>
+      <div className="col-6">
+        <DeployedContractsList />
+      </div>
     </div>
   );
 }

@@ -7,19 +7,20 @@ Account 2: 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
 Account 3: 0x70997970C51812dc3A010C7d01b50e0d17dc79C8
 Account 4: 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC
 
+## Installation Steps
+
+- Install Metamask
 - Delete unnecessary files created during development
 ```
 bash ./remove-files.sh
 ```
-
 - Run hardhat local network
 ```
 npx hardhat node
 ```
-
-
+- Connect metamask ot hardhat local network
+- Grab 3 accounts from the hardhat local network and import them into metamask. If you are setting up the app again after some usage, it helps to reset the account as the local network has no remembrance of previous transactions, hence creating nonce related transaction errors. Go to Settings > Advanced > Reset Account in metamask and click on Reset Account to delete all history. 
 - Compile Smart Contract
-
 ```
 npx hardhat --network localhost compile
 ```
