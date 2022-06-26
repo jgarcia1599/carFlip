@@ -36,6 +36,23 @@ npx hardhat node
 ```
 npx hardhat --network localhost compile
 ```
+- Create postgres database: 
+```
+sudo -u postgres psql
+postgres=# create database hardhat;
+postgres=# create user hardhatuser with encrypted password 'hardhatpassword';
+postgres=# grant all privileges on database hardhat to hardhatuser;
+```
+The connection string for the above db would be ```postgres://hardhatuser:hardhatpassword@127.0.0.1:5432/hardhat```.
+
+- Create a .env file in this directory and add the postgres connection string inside it as follows:
+```
+# .env
+
+DB_URL = postgres://hardhatuser:hardhatpassword@127.0.0.1:5432/hardhat
+```
+
+
 -  Run API
 ```
 nodemon api/index.js
@@ -48,19 +65,10 @@ cd frontend/
 npm start
 ```
 
-- Create postgres database: 
-```
-sudo -u postgres psql
-postgres=# create database hardhat;
-postgres=# create user hardhatuser with encrypted password 'hardhatpassword';
-postgres=# grant all privileges on database hardhat to hardhatuser;
-```
-The connection string for the above db would be ```postgres://hardhatuser:hardhatpassword@127.0.0.1:5432/hardhat```.
-
-
 ## Miscellaneous 
 ### Sample Test accounts Hardhat 
 These are the hardhat public keys I used while developing this app. 
+
 Account 2: 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
 Account 3: 0x70997970C51812dc3A010C7d01b50e0d17dc79C8
 Account 4: 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC
