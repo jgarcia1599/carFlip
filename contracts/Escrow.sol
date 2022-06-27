@@ -34,8 +34,8 @@ contract Escrow {
 	event Approved(uint);
 
 	function approve() external {
-		require(msg.sender == escrowAgent);
-		require(isCarOk == true);
+		require(msg.sender == escrowAgent, "Only the escrow agent can approve the transaction");
+		require(isCarOk == true, "Car Buyer hasn't verified car condition!");
 		uint balance = address(this).balance;
 		uint commision = (balance * escrowAgentCommission) / 100;
 		balance = balance - commision;

@@ -124,7 +124,6 @@ function DeployedContractsListItem(props) {
   }
 
   if (!contractData || !contractInfo) return null;
-  console.log("review", review);
   return (
     <div className="contractsContainer">
       <div key={contractData.contractAddress} className="existing-contract">
