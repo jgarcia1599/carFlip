@@ -14,7 +14,7 @@ CarFlip is a Dapp platform that facilitates car ownership transfers by leveragin
 
 After the above process culminates, car buyers and sellers can rate the escrow agent. The escrow agents' performance stats are publicly shown in the app for transparency and reliability. 
 
-This project was submitted as the final project for the 10-week <a hre="https://www.chainshot.com/bootcamp">Chainshot Ethereum Developer Bootcamp </a> I remotely participated in from April-June 2022. 
+This project was submitted as the final project for the 10-week <a href="https://www.chainshot.com/bootcamp">Chainshot Ethereum Developer Bootcamp </a> I remotely participated in from April-June 2022. 
 ## Installation Steps
 
 <b>Disclaimer:</b> This app was developed and tested only in the hardhat local network. If you want to test it on any other testnet or on mainnet, you would have to undergo the development necessary for the app to work in such environments. 
@@ -32,7 +32,7 @@ npm install
 ```
 npx hardhat node
 ```
-- Connect metamask ot hardhat local network
+- Connect metamask to hardhat local network
 - Grab 3 accounts from the hardhat local network and import them into metamask. If you are setting up the app again after some usage, it helps to reset the account as the local network has no remembrance of previous transactions, hence creating nonce related transaction errors. Go to Settings > Advanced > Reset Account in metamask and click on Reset Account to delete all history. 
 - Compile Smart Contract
 ```
