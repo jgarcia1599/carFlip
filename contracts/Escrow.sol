@@ -39,10 +39,10 @@ contract Escrow {
 		uint balance = address(this).balance;
 		uint commision = (balance * escrowAgentCommission) / 100;
 		balance = balance - commision;
-		carSeller.transfer(balance);
-		escrowAgent.transfer(commision);
 		emit Approved(balance);
 		isApproved = true;
+		carSeller.transfer(balance);
+		escrowAgent.transfer(commision);
 	}
 	function carIsOkay() external payable{
 		// car buyer must ensure the car is in optimal condition with certified car shop
