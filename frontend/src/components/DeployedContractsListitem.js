@@ -16,6 +16,7 @@ function DeployedContractsListItem(props) {
   let contractInfo = props.contractInfo;
   const [file, setFile] = useState();
   const [fileName, setFileName] = useState("");
+  const [error, setError] = useState(false);
 
   const [review, setReview] = useState(null);
 
@@ -41,6 +42,7 @@ function DeployedContractsListItem(props) {
         })
         .catch((err) => {
           console.log("error deploying contract", err);
+          setError(true);
         });
     });
   }
@@ -61,6 +63,7 @@ function DeployedContractsListItem(props) {
       })
       .catch((err) => {
         console.log("error deploying contract", err);
+        setError(true);
       });
   }
 
@@ -92,6 +95,7 @@ function DeployedContractsListItem(props) {
     }
 
     if (!by) return;
+
     return (
       <div className="alert alert-info" role="alert">
         <p>
@@ -118,16 +122,30 @@ function DeployedContractsListItem(props) {
   }
 
   function submitReview(by) {
-    if (!review) return;
-    updateEscrowAgentStats(null, null, contractInfo.escrowAgent, review);
-    submittedReview(contractData.contractAddress, by);
+    try {
+      if (!review) return;
+      updateEscrowAgentStats(null, null, contractInfo.escrowAgent, review);
+      submittedReview(contractData.contractAddress, by);
+    } catch (error) {
+      setError(true);
+    }
   }
 
   if (!contractData || !contractInfo) return null;
+
+  if (error === true) {
+    setTimeout(() => setError(false), 2000); // hacky fix to remove error message after some time
+  }
+
   return (
     <div className="contractsContainer">
       <div key={contractData.contractAddress} className="existing-contract">
         <ul className="fields">
+          {error && (
+            <div className="alert alert-danger">
+              Error performing action on contract!
+            </div>
+          )}
           {model.userAddress === contractInfo.escrowAgent.toLowerCase() &&
             contractData.isApproved === false && (
               <div
