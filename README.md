@@ -17,7 +17,7 @@ After the above process culminates, car buyers and sellers can rate the escrow a
 This project was submitted as the final project for the 10-week <a href="https://www.chainshot.com/bootcamp">Chainshot Ethereum Developer Bootcamp </a> I remotely participated in from April-June 2022. 
 
 ## Media
-Chainshot published an [article](https://www.chainshot.com/article/carflip) on my project
+Chainshot published an [article](https://www.chainshot.com/article/carflip) on my project!!!
 ## Installation Steps
 
 <b>Disclaimer:</b> This app was developed and tested only in the hardhat local network. If you want to test it on any other testnet or on mainnet, you would have to undergo the development necessary for the app to work in such environments. 
